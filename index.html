@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.0/css/all.min.css"
+    integrity="sha512-BnbUDfEUfV0Slx6TunuB042k9tuKe3xrD6q4mg5Ed72LTgzDIcLPxg6yI2gcMFRyomt+yJJxE+zJwNmxki6/RA=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+<body>
+    <div class="main_div" id="main">
+        <div class="music_container">
+            <h2 id="title">Faded</h2>
+            <h3 id="artist">Alen Walker</h3>
+            <div class="volume_bar">
+                <i class="fas fa-volume-down" id="down"></i>
+                <div class="volume_container" id="volume_container">
+                    <div id="volume"></div>
+                </div>
+                <i class="fas fa-volume-up" id="up"></i>
+            </div>
+            <div class="img_container">
+                <img src="images/faded.jpg" alt="">
+            </div>
+            <audio src="music/faded.mp3"></audio>
+
+            <!-- progress bar -->
+
+            <div class="progressbar" id="progressbar">
+                <div class="duriation_meter">
+                    <div id="current_time">0.00</div>
+                    <div id="duriation">3.32</div>
+                </div>
+                <div class="progress_div" id="progress_div">
+                    <div class="progress" id="progress">
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- controls -->
+            <div class="music_controls">
+                <i class="fas fa-backward" id="prev" title="Previous"></i>
+                <i class="fas fa-play" id="play" title="Play"></i>
+                <i class="fas fa-forward" id="next" title="Next"></i>
+            </div>
+        </div>
+    </div>
+    <script>
+        const music = document.querySelector("audio");
+        const img = document.querySelector("img");
+        const play = document.getElementById("play");
+        const prev = document.getElementById("prev");
+        const next = document.getElementById("next");
+        const artist = document.getElementById("artist");
+        const title = document.getElementById("title");
+        const background = document.getElementById("main");
+        let progress = document.getElementById('progress');
+        let current_time = document.getElementById("current_time");
+        let total_duriation = document.getElementById("duriation");
+        const progress_div = document.getElementById("progress_div");
+        const volume = document.getElementById("volume");
+        const up = document.getElementById("up");
+        const down = document.getElementById("down");
+        const volume_container = document.getElementById("volume_container");
+
+        let isplaying = false;
+
+        const songs = [
+            {
+                name: "faded",
+                title: "Faded",
+                artist: "Alen Walker",
+                img: "faded.jpg"
+            },
+            {
+                name: "shape",
+                title: "Shape of You",
+                artist: "ed sheeran",
+                img: "shape.jpg"
+            },
+            {
+                name: "livefast",
+                title: "Live Fast",
+                artist: "Alen Walker",
+                img: "livefast.jpg"
+            },
+            {
+                name: "Stay",
+                title: "Stay",
+                artist: "Justin Bieber",
+                img: "STAY.png"
+            },
+            {
+                name: "madmiramar",
+                title: "Mad Miramar",
+                artist: "Krafton",
+                img: "madmiramar.jpeg"
+            },
+            {
+                name: "industry",
+                title: "Industry Baby",
+                artist: "Lil Nas X",
+                img: "indubaby.jpg"
+            },
+            {
+                name: "randall",
+                title: "Wahran",
+                artist: "Randall",
+                img: "randall.jpg"
+            },
+            {
+                name: "lovely",
+                title: "Lovely",
+                artist: "Billie Eilish and Khalid",
+                img: "lovely.jpg"
+            },
+            {
+                name: "fearless",
+                title: "Fearless",
+                artist: "Lost Sky",
+                img: "fearless.jpg"
+            },
+            {
+                name: "hemama",
+                title: "Hey mama",
+                artist: "David Guetta",
+                img: "hema.jpg"
+            },
+            {
+                name: "stereo",
+                title: "Stereo",
+                artist: "Gym class heroes",
+                img: "stereo.jpg"
+            },
+            {
+                name: "intheend",
+                title: "In the end",
+                artist: "Tommee Profitt",
+                img: "intheend.jpg"
+            },
+            {
+                name: "pubg2a",
+                title: "2nd Anniversary",
+                artist: "Krafton Game",
+                img: "pubg2a.jpg"
+            },
+            {
+                name: "peaky",
+                title: "Where are you",
+                artist: "Otnicka",
+                img: "peaky.jpg"
+            },
+            {
+                name: "onmyway",
+                title: "On My Way",
+                artist: "Alen Walker",
+                img: "OnMyWay.jpg"
+            },
+            {
+                name: "drive",
+                title: "Drive Forever",
+                artist: "Sergio Valentino",
+                img: "sigma.jpg"
+            },
+            {
+                name: "heslirim",
+                title: "Heslirim",
+                artist: "Serhat Drums",
+                img: "hislerim.jpg"
+            },
+        ];
+
+        //for play
+        const playMusic = () => {
+            isplaying = true;
+            music.play();
+            play.classList.replace('fa-play', "fa-pause");
+            img.classList.add("anime");
+        };
+
+        //for pause
+        const pauseMusic = () => {
+            isplaying = false;
+            music.pause();
+            play.classList.replace('fa-pause', "fa-play");
+            img.classList.remove('anime');
+        };
+
+        play.addEventListener('click', () => {
+            if (isplaying) {
+                pauseMusic();
+            }
+            else {
+                playMusic();
+            }
+        });
+
+        const loadSong = (song) => {
+            title.textContent = song.title;
+            artist.textContent = song.artist;
+            music.src = "music/" + song.name + ".mp3";
+            img.src = "images/" + song.img;
+            background.style = `background: url(images/${song.img}) no-repeat center center; background-size:cover;`;
+        }
+
+        songIndex = 0;
+        // loadSong(songs[2]);
+
+        const nextsong = () => {
+            songIndex = (songIndex + 1) % songs.length;
+            loadSong(songs[songIndex]);
+            playMusic();
+        }
+
+        const prevsong = () => {
+            songIndex = (songIndex - 1 + songs.length) % songs.length;
+            loadSong(songs[songIndex]);
+            playMusic();
+        }
+
+        // progress js work 
+        music.addEventListener('timeupdate', (event) => {
+            const { currentTime, duration } = event.srcElement;
+            let progress_time = (currentTime / duration) * 100;
+            progress.style.width = `${progress_time}%`;
+
+            let duriation_minute = Math.floor(duration / 60);
+            let duriation_second = Math.floor(duration % 60);
+
+            let tot_duration = `${duriation_minute}:${duriation_second}`;
+
+            if (duration) {
+                total_duriation.textContent = `${tot_duration}`;
+            }
+
+            let current_minute = Math.floor(currentTime / 60);
+            let current_second = Math.floor(currentTime % 60);
+
+            if (current_second < 10) {
+                current_second = `0${current_second}`;
+            }
+
+            let tot_current_time = `${current_minute}:${current_second}`;
+
+            current_time.textContent = `${tot_current_time}`;
+
+        });
+
+        progress_div.addEventListener('click', (event) => {
+            const { duration } = music;
+
+            let move_progress = (event.offsetX / event.srcElement.clientWidth) * duration;
+
+            music.currentTime = move_progress;
+
+        });
+
+        volume_container.addEventListener('click', (event)=>{
+
+            music.volume = event.offsetX / 100 <= 0.01 ? 0 : event.offsetX /100 >= 0.98 ? 1 : event.offsetX/100;
+            volume.style.width = `${music.volume * 100}%`;
+        });
+
+        up.addEventListener('click', ()=>{
+            if(music.volume + 0.10 <= 1){
+                down.classList.replace('fa-volume-mute', 'fa-volume-down');
+                music.volume = music.volume + 0.10;
+                volume.style.width = `${music.volume * 100}%`;
+            }
+        });
+
+        down.addEventListener('click', ()=>{
+            if(music.volume - 0.10 >= 0.1){
+                music.volume = music.volume - 0.10;
+                volume.style.width = `${music.volume * 100}%`;
+            }
+            else{
+                music.volume = 0;
+                down.classList.replace('fa-volume-down', 'fa-volume-mute');
+                volume.style.width = `${music.volume * 100}%`;
+            }
+        });
+
+
+        music.addEventListener('ended', nextsong);
+
+        next.addEventListener('click', nextsong);
+        prev.addEventListener('click', prevsong);
+    </script>
+</body>
+
+</html>
