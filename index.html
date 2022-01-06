@@ -232,6 +232,10 @@
 
             let duriation_minute = Math.floor(duration / 60);
             let duriation_second = Math.floor(duration % 60);
+            
+            if (duriation_second < 10) {
+                duriation_second = `0${duriation_second}`;
+            }
 
             let tot_duration = `${duriation_minute}:${duriation_second}`;
 
