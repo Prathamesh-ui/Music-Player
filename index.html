@@ -273,6 +273,10 @@
                 music.volume = music.volume + 0.10;
                 volume.style.width = `${music.volume * 100}%`;
             }
+            else{
+                music.volume = 1;
+                volume.style.width = `${music.volume * 100}%`;
+            }
         });
 
         down.addEventListener('click', ()=>{
